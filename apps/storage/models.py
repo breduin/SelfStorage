@@ -1,8 +1,7 @@
 from django.db import models
-
 from .validators import lat_validators, lng_validators
-# Create your models here.
-
+from django.conf import settings
+    
 
 class Warehouse(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название склада')
@@ -105,7 +104,6 @@ class Price(models.Model):
         db_table = 'prices'
 
 
-# TODO: Добавить кастомную модель для пользователя и добавить связь
 class Order(models.Model):
     warehouse = models.ForeignKey(Warehouse,
                                   null=True,
@@ -116,6 +114,10 @@ class Order(models.Model):
     rent_duration = models.DateField(verbose_name='Срок аренды')
     status = models.TextChoices('status', 'PREORDER ORDER DONE')
     access_code = models.CharField(max_length=50, unique=True, verbose_name='Код доступа')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, 
+                            on_delete=models.CASCADE,
+                            editable=False,
+                            )
 
     @property
     def rent_data_end(self):
@@ -136,6 +138,8 @@ class Order(models.Model):
 
 
 # TODO: Не понял откуда берётся значение price, уточнить и добавить.
+# Цена вычисляется как unit.price * quantity и записывается после заполнения формы,
+# например во Views после проверки формы is_valid().
 class OrderUnit(models.Model):
     unit = models.ForeignKey(Unit,
                              on_delete=models.DO_NOTHING,
@@ -146,3 +150,8 @@ class OrderUnit(models.Model):
                               related_name='rent_order',
                               verbose_name='Основной заказ')
     quantity = models.PositiveSmallIntegerField(verbose_name='Количество')
+
+    price = models.FloatField(verbose_name='Цена', 
+                              editable=False, 
+                              null=True,                               
+                              )

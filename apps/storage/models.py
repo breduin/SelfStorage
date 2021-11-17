@@ -20,3 +20,18 @@ class Warehouse(models.Model):
         verbose_name = 'Склад'
         verbose_name_plural = 'Склады'
         db_table = 'warehouses'
+
+
+class UnitMeasurement(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Единица измерения')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Единица измерения'
+        verbose_name_plural = 'Единицы измерения'
+        db_table = 'unit_measurements'
+
+
+

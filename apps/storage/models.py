@@ -36,7 +36,10 @@ class UnitMeasurement(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='Категория')
-    measurement = models.ForeignKey(UnitMeasurement, related_name='mes_name', verbose_name='Единица измерения')
+    measurement = models.ForeignKey(UnitMeasurement,
+                                    on_delete=models.CASCADE,
+                                    related_name='mes_name',
+                                    verbose_name='Единица измерения')
 
     def __str__(self):
         return self.name
@@ -48,7 +51,7 @@ class Category(models.Model):
 
 
 class PricePeriod(models.Model):
-    period = models.CharField(max_length=100, verbose_name='Едииница времени')
+    period = models.CharField(max_length=100, verbose_name='Единица времени')
 
     def __str__(self):
         return self.period
@@ -60,8 +63,8 @@ class PricePeriod(models.Model):
 
 
 class BaseStepPrice(models.Model):
-    category = models.ForeignKey(Category, related_name='price', verbose_name='Категория')
-    warehouse = models.ForeignKey(Warehouse, related_name='warehouse', verbose_name='Склад')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='price', verbose_name='Категория')
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='warehouse', verbose_name='Склад')
     base_price = models.FloatField(verbose_name='Базовая цена')
     step_price = models.FloatField(verbose_name='Шаг цены')
 
@@ -76,7 +79,7 @@ class BaseStepPrice(models.Model):
 
 class Unit(models.Model):
     name = models.CharField(max_length=200, verbose_name='Объект аренды')
-    category = models.ForeignKey(Category, related_name='category', verbose_name='Категория')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category', verbose_name='Категория')
 
     def __str__(self):
         return self.name
@@ -88,10 +91,10 @@ class Unit(models.Model):
 
 
 class Price(models.Model):
-    unit = models.ForeignKey(Unit, related_name='rent_unit', verbose_name='Объект аренды')
-    warehouse = models.ForeignKey(Warehouse, related_name='warehouse', verbose_name='Склад')
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name='rent_unit', verbose_name='Объект аренды')
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='warehouse', verbose_name='Склад')
     price = models.FloatField(verbose_name='Цена')
-    period = models.ForeignKey(PricePeriod, related_name='period', verbose_name='Период')
+    period = models.ForeignKey(PricePeriod, on_delete=models.CASCADE, related_name='period', verbose_name='Период')
 
     def __str__(self):
         return self.price
@@ -101,3 +104,45 @@ class Price(models.Model):
         verbose_name_plural = 'Цены'
         db_table = 'prices'
 
+
+# TODO: Добавить кастомную модель для пользователя и добавить связь
+class Order(models.Model):
+    warehouse = models.ForeignKey(Warehouse,
+                                  null=True,
+                                  on_delete=models.SET_NULL,
+                                  related_name='warehouse',
+                                  verbose_name='Склад')
+    rent_start = models.DateField(verbose_name='Дата начала аренды')
+    rent_duration = models.DateField(verbose_name='Срок аренды')
+    status = models.TextChoices('status', 'PREORDER ORDER DONE')
+    access_code = models.CharField(max_length=50, unique=True, verbose_name='Код доступа')
+
+    @property
+    def rent_data_end(self):
+        # FIXME
+        pass
+
+    def get_sum(self):
+        # FIXME
+        pass
+
+    def __str__(self):
+        return self.status
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        db_table = 'orders'
+
+
+# TODO: Не понял откуда берётся значение price, уточнить и добавить.
+class OrderUnit(models.Model):
+    unit = models.ForeignKey(Unit,
+                             on_delete=models.DO_NOTHING,
+                             related_name='rent_unit',
+                             verbose_name='Объект аренды')
+    order = models.ForeignKey(Order,
+                              on_delete=models.DO_NOTHING,
+                              related_name='rent_unit',
+                              verbose_name='Основной заказ')
+    quantity = models.PositiveSmallIntegerField(verbose_name='Количество')

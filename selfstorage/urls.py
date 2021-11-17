@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.static import serve
 
-from selfstorage import settings
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.storage.urls')),
+    path('payment/', include('apps.payment.urls')),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]

@@ -13,11 +13,14 @@ env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = env.str('SECRET_KEY')
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env.str('SECRET_KEY', default='default_key')
 
-DEBUG = env.bool('DEBUG', False)
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', '[::1]'])
+
 
 # Application definition
 
@@ -117,10 +120,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'basic_templates/static'),
-]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'basic_templates/static'),
+# ]
 
 
 # Media files (application images, etc)
@@ -136,7 +139,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
-# if os.getenv('DEPLOY'):
-#     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# else:
-#     STATICFILES_DIRS = [BASE_DIR, 'static']
+if os.getenv('DEPLOY'):
+    STATIC_ROOT = os.path.join(BASE_DIR, 'basic_templates/static')
+else:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'basic_templates/static'),
+    ]
+
+STRIPE_PUBLISHABLE_KEY = env.str('STRIPE_PUBLISHABLE_KEY', default='sk_test_51JwnrPEmb2nibwZk42WK3kcNo8IM0H1dP6dplGg2x5rAvbCAfQ8uya8h28kJ7O9LQH2C4uHoUMpr133HMlvw073i00T1bIRhJl')

@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  web:
+    container_name: self_storage_web
+    image: {your docker hub repo}/{container_name}:{tag}
+    restart: always
+    command: gunicorn selfstorage.wsgi:application --bind 0.0.0.0:8000
+    environment:
+      - ALLOWED_HOSTS={your_server_ip_address}
+      - SECRET_KEY={your_secret_key}
+      - DEBUG={True of False}
+    volumes:
+      - ./media:/self_storage/media
+    ports:
+      - '8000:8000'

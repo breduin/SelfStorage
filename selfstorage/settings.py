@@ -20,16 +20,15 @@ env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)5104a7(oqm-s7e2uapi(yi@__iey^a6p*2*)84ym#_jz=_#*u'
+SECRET_KEY = env.str('SECRET_KEY', default='default_key')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', '[::1]'])
 
 
 # Application definition
@@ -143,4 +142,4 @@ if os.getenv('DEPLOY'):
 else:
     STATICFILES_DIRS = [BASE_DIR, 'static']
 
-STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY')
+STRIPE_PUBLISHABLE_KEY = env.str('STRIPE_PUBLISHABLE_KEY', default='sk_test_51JwnrPEmb2nibwZk42WK3kcNo8IM0H1dP6dplGg2x5rAvbCAfQ8uya8h28kJ7O9LQH2C4uHoUMpr133HMlvw073i00T1bIRhJl')

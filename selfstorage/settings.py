@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from environs import Env
+
+env = Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.storage'
+    'apps.storage',
+    'apps.payment',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +142,5 @@ if os.getenv('DEPLOY'):
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 else:
     STATICFILES_DIRS = [BASE_DIR, 'static']
+
+STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY')

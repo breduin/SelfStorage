@@ -22,6 +22,6 @@ from selfstorage import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', include('apps.storage.urls')),
+    path('', include('apps.storage.urls')),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]

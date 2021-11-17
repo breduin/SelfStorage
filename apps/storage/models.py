@@ -34,4 +34,14 @@ class UnitMeasurement(models.Model):
         db_table = 'unit_measurements'
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Категория')
+    measurement = models.ForeignKey(UnitMeasurement, related_name='mes_name', verbose_name='Единица измерения')
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name= 'Категория'
+        verbose_name_plural = 'Категории'
+        db_table = 'categories'

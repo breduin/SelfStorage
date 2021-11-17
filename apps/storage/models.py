@@ -58,3 +58,46 @@ class PricePeriod(models.Model):
         verbose_name_plural = 'Базовое время аренды'
         db_table = 'price_periods'
 
+
+class BaseStepPrice(models.Model):
+    category = models.ForeignKey(Category, related_name='price', verbose_name='Категория')
+    warehouse = models.ForeignKey(Warehouse, related_name='warehouse', verbose_name='Склад')
+    base_price = models.FloatField(verbose_name='Базовая цена')
+    step_price = models.FloatField(verbose_name='Шаг цены')
+
+    def __str__(self):
+        return self.base_price
+
+    class Meta:
+        verbose_name = 'Базовая цена'
+        verbose_name_plural = 'Базовые цены'
+        db_table = 'base_prices'
+
+
+class Unit(models.Model):
+    name = models.CharField(max_length=200, verbose_name='Объект аренды')
+    category = models.ForeignKey(Category, related_name='category', verbose_name='Категория')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Объект аренды'
+        verbose_name_plural = 'Объекты аренды'
+        db_table = 'units'
+
+
+class Price(models.Model):
+    unit = models.ForeignKey(Unit, related_name='rent_unit', verbose_name='Объект аренды')
+    warehouse = models.ForeignKey(Warehouse, related_name='warehouse', verbose_name='Склад')
+    price = models.FloatField(verbose_name='Цена')
+    period = models.ForeignKey(PricePeriod, related_name='period', verbose_name='Период')
+
+    def __str__(self):
+        return self.price
+
+    class Meta:
+        verbose_name = 'Цена'
+        verbose_name_plural = 'Цены'
+        db_table = 'prices'
+

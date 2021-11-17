@@ -42,6 +42,19 @@ class Category(models.Model):
         return self.name
 
     class Meta:
-        verbose_name= 'Категория'
+        verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
         db_table = 'categories'
+
+
+class PricePeriod(models.Model):
+    period = models.CharField(max_length=100, verbose_name='Едииница времени')
+
+    def __str__(self):
+        return self.period
+
+    class Meta:
+        verbose_name = 'Базовое время аренды'
+        verbose_name_plural = 'Базовое время аренды'
+        db_table = 'price_periods'
+

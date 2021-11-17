@@ -7,7 +7,7 @@ from .validators import lat_validators, lng_validators
 class Warehouse(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название склада')
     description = models.TextField(verbose_name='Подробное описание склада')
-    address = models.CharField(unique=True, verbose_name='Адрес склада')
+    address = models.CharField(max_length=200, unique=True, verbose_name='Адрес склада')
     phone = models.PositiveSmallIntegerField(verbose_name='Телефонный номер склада')
     latitude = models.FloatField(validators=lat_validators, verbose_name='Широта', )
     longitude = models.FloatField(validators=lng_validators, verbose_name='Долгота')
@@ -51,7 +51,7 @@ class Category(models.Model):
 
 
 class PricePeriod(models.Model):
-    period = models.CharField(max_length=100, verbose_name='Единица времени')
+    duration = models.CharField(max_length=100, verbose_name='Единица времени')
 
     def __str__(self):
         return self.period
@@ -64,7 +64,7 @@ class PricePeriod(models.Model):
 
 class BaseStepPrice(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='price', verbose_name='Категория')
-    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='warehouse', verbose_name='Склад')
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='main_storage', verbose_name='Склад')
     base_price = models.FloatField(verbose_name='Базовая цена')
     step_price = models.FloatField(verbose_name='Шаг цены')
 
@@ -92,7 +92,7 @@ class Unit(models.Model):
 
 class Price(models.Model):
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name='rent_unit', verbose_name='Объект аренды')
-    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='warehouse', verbose_name='Склад')
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='storage', verbose_name='Склад')
     price = models.FloatField(verbose_name='Цена')
     period = models.ForeignKey(PricePeriod, on_delete=models.CASCADE, related_name='period', verbose_name='Период')
 
@@ -139,10 +139,10 @@ class Order(models.Model):
 class OrderUnit(models.Model):
     unit = models.ForeignKey(Unit,
                              on_delete=models.DO_NOTHING,
-                             related_name='rent_unit',
+                             related_name='unit',
                              verbose_name='Объект аренды')
     order = models.ForeignKey(Order,
                               on_delete=models.DO_NOTHING,
-                              related_name='rent_unit',
+                              related_name='rent_order',
                               verbose_name='Основной заказ')
     quantity = models.PositiveSmallIntegerField(verbose_name='Количество')

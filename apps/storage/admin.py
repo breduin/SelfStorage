@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Warehouse, Unit, Price, Category, UnitMeasurement, PricePeriod, BaseStepPrice
+from .models import Warehouse, Unit, Price, Category, UnitMeasurement\
+    , PricePeriod, BaseStepPrice, Order, OrderUnit
 
 admin.site.register(Warehouse)
 
@@ -14,3 +15,7 @@ admin.site.register(UnitMeasurement)
 admin.site.register(PricePeriod)
 
 admin.site.register(BaseStepPrice)
+
+admin.site.register(Order)
+
+admin.site.register(OrderUnit)

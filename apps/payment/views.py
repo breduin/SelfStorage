@@ -1,21 +1,24 @@
 import stripe
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.conf import settings
+from apps.storage.models import Order
 
 
-def make_payment(request):
+def make_payment(request, order_id):
     stripe.api_key = settings.STRIPE_PUBLISHABLE_KEY
+
+    order = Order.objects.get(id=order_id)
 
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=[{
             'price_data': {
-                'currency': 'usd',
+                'currency': 'rub',
                 'product_data': {
-                    'name': 'T-shirt',
+                    'name': order.access_code,
                 },
-                'unit_amount': 2000,
+                'unit_amount': order.get_sum()*100,
             },
             'quantity': 1,
         }],

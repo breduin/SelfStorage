@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load l10n %}
 
 {% block title %}Добро пожаловать!{% endblock %}
 
@@ -22,16 +23,16 @@
         //  - magnifier.rightButton - увеличение области, выделенной правой кнопкой мыши.
         .disable(['scrollZoom']);
 
-        {% for name, props in warehouses.items %}
+        {% for w in warehouses %}
             var myPlacemark_{{ forloop.counter0 }} = new ymaps.GeoObject({
                 geometry: {
                 type: "Point",
-                coordinates: {{ props.0 }}
+                coordinates: [{{ w.latitude|unlocalize }},{{ w.longitude|unlocalize }}]
                 },
                 properties: {
                 // Контент метки.
-                iconContent: '{{ name }}',
-                hintContent: '{{ props.1 }}',
+                iconContent: '{{ w.title }}',
+                hintContent: '{{ w.description }}',
                 }
         },{
             // Опции.
@@ -147,7 +148,25 @@
     </div>
 
     <div class="row container-lg">
-    {% block content %}{% endblock %}
+    {% block content %}
+    <hr class="featurette-divider">
+    <h2>Наши склады</h2>
+        {% for w in warehouses %}
+
+
+            <div class="card">
+            <h5 class="card-header">{{ w.title }}</h5>
+            <div class="card-body">
+                <p class="card-text">{{ w.description }}</p>
+                <a href="{% url 'calculator' 1 %}" class="btn btn-outline-info">Арендовать бокс</a>
+            </div>
+            <div class="card-footer">
+            <i class="bi bi-house-door-fill"></i> {{ w.address }}, <i class="bi bi-telephone-fill"></i> {{ w.phone }}
+            </div>
+            </div>
+
+        {% endfor %}
+    {% endblock %}
     </div>
 
     {% block featurettes %}

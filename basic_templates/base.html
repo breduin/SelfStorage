@@ -77,6 +77,13 @@
         <div class="d-flex navbar-brand">
           +7(495) 123-45-67
         </div>
+        {% if user.is_authenticated %}            
+        <div class="d-flex">
+          <a class="nav-link" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right fs-4"></i></a>
+        </div>
+        {% endif %}
+
+
       </div>
     </div>
   </nav>

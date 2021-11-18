@@ -70,7 +70,7 @@ class BaseStepPrice(models.Model):
     step_price = models.FloatField(verbose_name='Шаг цены')
 
     def __str__(self):
-        return self.base_price
+        return str(self.base_price)
 
     class Meta:
         verbose_name = 'Базовая цена'
@@ -98,7 +98,7 @@ class Price(models.Model):
     period = models.ForeignKey(PricePeriod, on_delete=models.CASCADE, related_name='period', verbose_name='Период')
 
     def __str__(self):
-        return self.price
+        return str(self.price)
 
     class Meta:
         verbose_name = 'Цена'

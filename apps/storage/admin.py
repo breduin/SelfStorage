@@ -15,3 +15,7 @@ admin.site.register(UnitMeasurement)
 admin.site.register(PricePeriod)
 
 admin.site.register(BaseStepPrice)
+
+admin.site.register(Order)
+
+admin.site.register(OrderUnit)

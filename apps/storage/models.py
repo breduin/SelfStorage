@@ -2,6 +2,7 @@ from django.db import models
 from .validators import lat_validators, lng_validators
 from django.conf import settings
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
 
 
 class Warehouse(models.Model):
@@ -55,7 +56,7 @@ class PricePeriod(models.Model):
     duration = models.CharField(max_length=100, verbose_name='Единица времени')
 
     def __str__(self):
-        return self.period
+        return self.duration
 
     class Meta:
         verbose_name = 'Базовое время аренды'
@@ -107,19 +108,24 @@ class Price(models.Model):
 
 
 class Order(models.Model):
+
+    STATUS_CHOICES = [
+        ('PREORDER', 'Preorder'),
+        ('ORDER', 'Order'),
+        ('DONE', 'Done'),
+    ]
+
     warehouse = models.ForeignKey(Warehouse,
                                   null=True,
                                   on_delete=models.SET_NULL,
                                   related_name='warehouse',
                                   verbose_name='Склад')
-    rent_start = models.DateField(verbose_name='Дата начала аренды')
-    rent_duration = models.DateField(verbose_name='Срок аренды')
-    status = models.TextChoices('status', 'PREORDER ORDER DONE')
+    status = models.CharField('Статус заказа', max_length=10, choices=STATUS_CHOICES, default='PREORDER')
     access_code = models.CharField(max_length=50, unique=True, verbose_name='Код доступа')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                 on_delete=models.CASCADE,
-                                 editable=False
-                                 )
+                             on_delete=models.CASCADE,
+                             editable=False
+                             )
 
     @property
     def rent_data_end(self):
@@ -152,7 +158,9 @@ class OrderUnit(models.Model):
                               related_name='rent_order',
                               verbose_name='Основной заказ')
     quantity = models.PositiveSmallIntegerField(verbose_name='Количество')
-
+    rent_start = models.DateField(verbose_name='Дата начала аренды',
+                                  null=True, default=timezone.now())
+    rent_duration = models.DurationField(verbose_name='Срок аренды', null=True)
     price = models.FloatField(verbose_name='Цена', 
                               editable=False, 
                               null=True,                               

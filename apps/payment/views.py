@@ -16,7 +16,7 @@ def make_payment(request, order_id):
             'price_data': {
                 'currency': 'rub',
                 'product_data': {
-                    'name': order.access_code,
+                    'name': order.id,
                 },
                 'unit_amount': order.get_sum()*100,
             },

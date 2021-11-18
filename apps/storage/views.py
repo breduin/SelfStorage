@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 
 def map_view(request):
     warehouses = {
@@ -9,3 +10,11 @@ def map_view(request):
     }
 
     return render(request, 'map.html', context={'warehouses': warehouses})
+
+
+def calculator(request, category_id):
+    return HttpResponseRedirect('/')
+
+
+def user_orders(request, user_id):
+    return HttpResponseRedirect('/')

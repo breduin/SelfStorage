@@ -37,6 +37,7 @@
     
     <!-- Custom styles for this template -->
     <link href="{% static 'basic_templates/css/carousel.css' %}" rel="stylesheet">
+    <link href="{% static 'basic_templates/css/storage.css' %}" rel="stylesheet">
 
 {# Load page specific head js-files #}
 {% block headjsfiles %}{% endblock %}
@@ -50,26 +51,25 @@
 <header>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Carousel</a>
+      <a class="navbar-brand" href="{% url 'main_page' %}">СКЛАДный</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link" href="{% url 'calculator' 1 %}">Калькулятор</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="{% url 'calculator' 2 %}">Сезонное хранение</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            <a class="nav-link" href="{% url 'user_orders' 1 %}">Личный кабинет</a>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        <div class="d-flex navbar-brand">
+          +7(495) 123-45-67
+        </div>
       </div>
     </div>
   </nav>
@@ -85,35 +85,35 @@
     </div>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-
+        <img class="front-image" src="{% static 'basic_templates/images/mini-storage-gab28e25f8_1920.jpg' %}">
+        
         <div class="container">
-          <div class="carousel-caption text-start">
-            <h1>Example headline.</h1>
-            <p>Some representative placeholder content for the first slide of the carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+          <div class="carousel-caption">
+            <h1>Удобные боксы.</h1>
+            <p>Для личных вещей, для товаров и документов</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Сдать на хранение</a></p>
           </div>
         </div>
       </div>
       <div class="carousel-item">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+        <img class="front-image" src="{% static 'basic_templates/images/mini-storage-g64512fe50_1920.jpg' %}">
 
         <div class="container">
           <div class="carousel-caption">
-            <h1>Another example headline.</h1>
-            <p>Some representative placeholder content for the second slide of the carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+            <h1>Круглосуточная надёжная охрана.</h1>
+            <p>Все ваши вещи в полной безопасности.</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Найти ближайший склад</a></p>
           </div>
         </div>
       </div>
       <div class="carousel-item">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+        <img class="front-image" src="{% static 'basic_templates/images/storage-warehouse-g24182d951_1920.jpg' %}">
 
         <div class="container">
-          <div class="carousel-caption text-end">
-            <h1>One more for good measure.</h1>
-            <p>Some representative placeholder content for the third slide of this carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+          <div class="carousel-caption">
+            <h1>У вас переезд?</h1>
+            <p>У нас есть большие боксы с подъездом на грузовике.</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Арендовать бокс</a></p>
           </div>
         </div>
       </div>

@@ -66,7 +66,7 @@
           <div class="carousel-caption">
             <h1>Удобные боксы.</h1>
             <p>Для личных вещей, для товаров и документов</p>
-            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 2 %}">Сдать на хранение</a></p>
+            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 2 1 %}">Сдать на хранение</a></p>
           </div>
         </div>
       </div>
@@ -77,7 +77,7 @@
           <div class="carousel-caption">
             <h1>Круглосуточная надёжная охрана.</h1>
             <p>Все ваши вещи в полной безопасности.</p>
-            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 1 %}">Найти ближайший склад</a></p>
+            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 1 1 %}">Найти ближайший склад</a></p>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@
           <div class="carousel-caption">
             <h1>У вас переезд?</h1>
             <p>У нас есть большие боксы с подъездом на грузовике.</p>
-            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 1 %}">Арендовать бокс</a></p>
+            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 1 1 %}">Арендовать бокс</a></p>
           </div>
         </div>
       </div>
@@ -158,7 +158,7 @@
             <h5 class="card-header">{{ w.title }}</h5>
             <div class="card-body">
                 <p class="card-text">{{ w.description }}</p>
-                <a href="{% url 'calculator' 1 %}" class="btn btn-outline-info">Арендовать бокс</a>
+                <a href="{% url 'calculator' 1 1 %}" class="btn btn-outline-info">Арендовать бокс</a>
             </div>
             <div class="card-footer">
             <i class="bi bi-house-door-fill"></i> {{ w.address }}, <i class="bi bi-telephone-fill"></i> {{ w.phone }}

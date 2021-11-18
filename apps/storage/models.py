@@ -55,7 +55,7 @@ class PricePeriod(models.Model):
     duration = models.CharField(max_length=100, verbose_name='Единица времени')
 
     def __str__(self):
-        return self.period
+        return self.duration
 
     class Meta:
         verbose_name = 'Базовое время аренды'

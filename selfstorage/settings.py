@@ -4,7 +4,7 @@ Django settings for selfstorage project.
 import os
 from pathlib import Path
 from environs import Env
-
+import dj_database_url
 
 env = Env()
 env.read_env()

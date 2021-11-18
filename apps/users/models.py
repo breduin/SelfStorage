@@ -1,10 +1,23 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class User(AbstractUser):
-    passport = models.PositiveSmallIntegerField(null=True, verbose_name='Серия и номер паспорта')
-    phone = models.PositiveSmallIntegerField(null=True, verbose_name='Номер телефона')
+    patronymic = models.CharField('Отчество', max_length=150, blank=True)
+    phone = PhoneNumberField('Мобильный телефон', null=True)
+    passport = models.CharField('Номер паспорта', max_length=30, null=True)
+    birthday_date = models.DateField('Дата рождения',
+                                     null=True,
+                                     db_index=True)
+    consent_to_processing_db = models.BooleanField(
+        'согласие на обработку персональных данных', default=False)
 
-    # class Meta:
-    #     db_table = 'customer'
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+

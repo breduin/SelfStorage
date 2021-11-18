@@ -1,7 +1,7 @@
 from django.db import models
 from .validators import lat_validators, lng_validators
 from django.conf import settings
-    
+
 
 class Warehouse(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название склада')
@@ -114,10 +114,10 @@ class Order(models.Model):
     rent_duration = models.DateField(verbose_name='Срок аренды')
     status = models.TextChoices('status', 'PREORDER ORDER DONE')
     access_code = models.CharField(max_length=50, unique=True, verbose_name='Код доступа')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, 
-                            on_delete=models.CASCADE,
-                            editable=False,
-                            )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                 on_delete=models.CASCADE,
+                                 editable=False
+                                 )
 
     @property
     def rent_data_end(self):

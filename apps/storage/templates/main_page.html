@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Добро пожаловать!{% endblock %}
+
+{% block headjsfiles %}
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=9ec12869-8f9d-4e5b-b686-3f5f6724f2cd&lang=ru_RU" type="text/javascript">
+    </script>
+
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init(){
+            var myMap = new ymaps.Map("map", {
+                center: [55.755819, 37.617644],
+                zoom: 10,
+                controls: ['geolocationControl', 'zoomControl']
+            });
+
+            myMap.behaviors
+        // Отключаем часть включенных по умолчанию поведений:
+        //  - drag - перемещение карты при нажатой левой кнопки мыши;
+        //  - magnifier.rightButton - увеличение области, выделенной правой кнопкой мыши.
+        .disable(['scrollZoom']);
+
+        {% for name, props in warehouses.items %}
+            var myPlacemark_{{ forloop.counter0 }} = new ymaps.GeoObject({
+                geometry: {
+                type: "Point",
+                coordinates: {{ props.0 }}
+                },
+                properties: {
+                // Контент метки.
+                iconContent: '{{ name }}',
+                hintContent: '{{ props.1 }}',
+                }
+        },{
+            // Опции.
+            // Иконка метки будет растягиваться под размер ее содержимого.
+            preset: 'islands#blackStretchyIcon'
+        }
+        );
+
+    myMap.geoObjects.add(myPlacemark_{{ forloop.counter0 }});    
+    {% endfor %}
+
+        }
+    </script>
+{% endblock %}
+
+
+
+{% block slider %}
+
+  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img class="front-image" src="{% static 'basic_templates/images/mini-storage-gab28e25f8_1920.jpg' %}">
+        
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Удобные боксы.</h1>
+            <p>Для личных вещей, для товаров и документов</p>
+            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 2 %}">Сдать на хранение</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img class="front-image" src="{% static 'basic_templates/images/mini-storage-g64512fe50_1920.jpg' %}">
+
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Круглосуточная надёжная охрана.</h1>
+            <p>Все ваши вещи в полной безопасности.</p>
+            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 1 %}">Найти ближайший склад</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img class="front-image" src="{% static 'basic_templates/images/storage-warehouse-g24182d951_1920.jpg' %}">
+
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>У вас переезд?</h1>
+            <p>У нас есть большие боксы с подъездом на грузовике.</p>
+            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 1 %}">Арендовать бокс</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+ {% endblock %}
+
+ 
+  <!-- Marketing messaging and featurettes
+  ================================================== -->
+  <!-- Wrap the rest of the page in another container to center all the content. -->
+
+  <div class="container marketing">
+    
+    {% block marketing %}
+    
+    <!-- Three columns of text below the carousel -->
+    <div class="row">
+      <div class="col-lg-4">
+        <i class="fas fa-couch" style="font-size: 7em; color: #ff6347"></i>
+
+
+        <h2>Удобно</h2>
+        <p>Наш склад недалеко от вас. Вам не придется тратить время на поездку.</p>
+        
+      </div><!-- /.col-lg-4 -->
+      <div class="col-lg-4">
+        <i class="fas fa-door-closed" style="font-size: 7em; color: #ff6347"></i>
+
+        <h2>Надёжно</h2>
+        <p>Ваши вещи под надёжной защитой. Вам не придётся беспокоиться об их сохранности.</p>
+        
+      </div><!-- /.col-lg-4 -->
+      <div class="col-lg-4">
+        <i class="fas fa-wallet" style="font-size: 7em; color: #ff6347"></i>
+
+        <h2>Доступно</h2>
+        <p>Хранить у нас выгоднее, чем захламлять балкон. Наконец-то вы сможете на нём пить кофе.</p>
+        
+      </div><!-- /.col-lg-4 -->
+    </div><!-- /.row -->
+    {% endblock %}
+
+    <div class="row container-lg">
+    {% block map %}
+      <div id="map" style="width: 100%; height: 40rem;"></div>
+    {% endblock %}
+    </div>
+
+    <div class="row container-lg">
+    {% block content %}{% endblock %}
+    </div>
+
+    {% block featurettes %}
+    <!-- START THE FEATURETTES -->
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Аренда бокса</h2>
+        <p class="lead">Выбирайте склад и бокс площадью от 1 до 20 м2</p>
+      </div>
+      <div class="col-md-5">
+        <img class="market-image" src="{% static 'basic_templates/images/mini-storage-g10df42229_1920.jpg' %}">
+
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7 order-md-2">
+        <h2 class="featurette-heading">Хранение сезонных вещей</h2>
+        <p class="lead">Освободите квартиру и балкон от сезонных вещей. Храните зимнюю резину летом, а летнюю 
+        зимой на складе.</p>
+      </div>
+      <div class="col-md-5 order-md-1">
+        <img class="market-image" src="{% static 'basic_templates/images/winter-tires-gb6b52735e_1920.jpg' %}">
+
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <!-- /END THE FEATURETTES -->
+    {% endblock %}
+
+

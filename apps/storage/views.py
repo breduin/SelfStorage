@@ -17,7 +17,6 @@ def main_page(request):
     warehouses_for_template = {}
     for w in warehouses:
         warehouses_for_template[w.title] = [[w.latitude, w.longitude], w.description]
-        print(w.longitude, w.latitude)
 
     return render(request, 'main_page.html', context={
                                         'warehouses': warehouses,

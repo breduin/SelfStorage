@@ -186,7 +186,7 @@ class OrderUnit(models.Model):
                                                 )
     rent_start = models.DateField(verbose_name='Дата начала аренды',
                                   null=True, 
-                                  default=timezone.now()
+                                  default=timezone.now
                                   )
     rent_duration = models.CharField('Длительность аренды', 
                                       max_length=10, 

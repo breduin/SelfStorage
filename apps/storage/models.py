@@ -149,6 +149,26 @@ class Order(models.Model):
 # Цена вычисляется как unit.price * quantity и записывается после заполнения формы,
 # например во Views после проверки формы is_valid().
 class OrderUnit(models.Model):
+
+    DURATION_CHOICES = [
+        ('1week', '1 неделя'),
+        ('2weeks', '2 недели'),
+        ('3weeks', '3 недели'),
+        ('1month', '1 месяц'),
+        ('2months', '2 месяца'),
+        ('3months', '3 месяца'),
+        ('4months', '4 месяца'),
+        ('5months', '5 месяцев'),
+        ('6months', '6 месяцев'),
+        ('7months', '7 месяцев'),
+        ('8months', '8 месяцев'),
+        ('9months', '9 месяцев'),
+        ('10months', '10 месяцев'),
+        ('11months', '11 месяцев'),
+        ('12months', '12 месяцев'),
+
+    ]
+
     unit = models.ForeignKey(Unit,
                              on_delete=models.DO_NOTHING,
                              related_name='unit',
@@ -160,7 +180,10 @@ class OrderUnit(models.Model):
     quantity = models.PositiveSmallIntegerField(verbose_name='Количество')
     rent_start = models.DateField(verbose_name='Дата начала аренды',
                                   null=True, default=timezone.now())
-    rent_duration = models.DurationField(verbose_name='Срок аренды', null=True)
+    rent_duration = models.CharField('Длительность аренды', 
+                                      max_length=10, 
+                                      choices=DURATION_CHOICES, 
+                                      default='1month')
     price = models.FloatField(verbose_name='Цена', 
                               editable=False, 
                               null=True,                               

@@ -15,7 +15,7 @@ class OrderUnitForm(forms.ModelForm):
 
     class Meta:
         model = OrderUnit
-        fields = ['unit', 'quantity', 'rent_start', 'rent_duration']
+        fields = ['warehouse', 'unit', 'quantity', 'rent_duration', 'rent_start']
 
     def __init__(self, *args, **kwargs):
         category_id = kwargs.pop('category_id', None)
@@ -27,4 +27,4 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['warehouse', 'status']
+        fields = ['status']

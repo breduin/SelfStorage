@@ -152,13 +152,12 @@
     <hr class="featurette-divider">
     <h2>Наши склады</h2>
         {% for w in warehouses %}
-
-
+        
             <div class="card">
             <h5 class="card-header">{{ w.title }}</h5>
             <div class="card-body">
                 <p class="card-text">{{ w.description }}</p>
-                <a href="{% url 'calculator' 1 1 %}" class="btn btn-outline-info">Арендовать бокс</a>
+                <a href="{% url 'calculator' 1 w.id %}" class="btn btn-outline-info">Арендовать бокс</a>
             </div>
             <div class="card-footer">
             <i class="bi bi-house-door-fill"></i> {{ w.address }}, <i class="bi bi-telephone-fill"></i> {{ w.phone }}

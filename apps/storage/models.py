@@ -16,7 +16,7 @@ class Warehouse(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.address
+        return self.title
 
     class Meta:
         verbose_name = 'Склад'
@@ -99,7 +99,7 @@ class Price(models.Model):
     period = models.ForeignKey(PricePeriod, on_delete=models.CASCADE, related_name='period', verbose_name='Период')
 
     def __str__(self):
-        return str(self.price)
+        return f"{self.unit.name}|{self.warehouse.title}|{self.period}|{str(self.price)}"
 
     class Meta:
         verbose_name = 'Цена'
@@ -166,7 +166,6 @@ class OrderUnit(models.Model):
         ('10months', '10 месяцев'),
         ('11months', '11 месяцев'),
         ('12months', '12 месяцев'),
-
     ]
 
     unit = models.ForeignKey(Unit,
@@ -177,9 +176,13 @@ class OrderUnit(models.Model):
                               on_delete=models.DO_NOTHING,
                               related_name='rent_order',
                               verbose_name='Основной заказ')
-    quantity = models.PositiveSmallIntegerField(verbose_name='Количество')
+    quantity = models.PositiveSmallIntegerField(verbose_name='Количество', 
+                                                default=1
+                                                )
     rent_start = models.DateField(verbose_name='Дата начала аренды',
-                                  null=True, default=timezone.now())
+                                  null=True, 
+                                  default=timezone.now()
+                                  )
     rent_duration = models.CharField('Длительность аренды', 
                                       max_length=10, 
                                       choices=DURATION_CHOICES, 

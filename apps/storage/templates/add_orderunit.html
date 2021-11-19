@@ -1,9 +1,19 @@
 {% extends "base.html" %}
+
 {% block content %}
-<h1 class="m-3">Добавление товара</h1>
+
+<h2 class="m-3">
+{% if category == 1 %}
+Нужен бокс? Отлично! Выбирайте.
+{% elif category == 2 %}
+Хотите сдать на хранение? Отлично! Выбирайте.
+{% else %}
+Уточните ваш выбор
+{% endif %}
+</h2>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <p>Пожалуйста, введите данные товара:</p>
+            <p>Пожалуйста, уточните данные:</p>
             <form action="." method="post">
                 {{ order_unit_form.as_p }}
                 {% csrf_token %}
@@ -11,4 +21,52 @@
             </form>
         </div>
     </div>
+
+<div class="row">
+<h2>Стоимость аренды</h2>
+<h3 id="rent_price">{{ initial_price }}</h3>
+</div>
+
 {% endblock %}
+
+{% block jsfiles %}
+<script>
+    $("#id_unit").change(function () {
+      var unit_id = $(this).val();
+      var quantity = $("#id_quantity").val();
+
+      $.ajax({
+        url: '{% url "get_unit_price" %}',
+        data: {
+          'unit_id': unit_id,
+          'quantity': quantity,
+        },
+        dataType: 'json',
+        success: function (data) {
+          document.getElementById("rent_price").innerHTML = data.price;
+        }
+      });
+
+    });
+
+    $("#id_quantity").change(function () {
+      var quantity = $(this).val();
+      var unit_id = $("#id_unit").val();
+
+      $.ajax({
+        url: '{% url "get_unit_price" %}',
+        data: {
+          'unit_id': unit_id,
+          'quantity': quantity,
+        },
+        dataType: 'json',
+        success: function (data) {
+          document.getElementById("rent_price").innerHTML = data.price;
+        }
+      });
+
+    });
+
+
+  </script>
+{% endblock %}  

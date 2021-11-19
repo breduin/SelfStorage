@@ -65,13 +65,18 @@ class PricePeriod(models.Model):
 
 
 class BaseStepPrice(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='price', verbose_name='Категория')
+    category = models.ForeignKey(Category, 
+                                 on_delete=models.CASCADE, 
+                                 limit_choices_to={'id': 1},
+                                 related_name='price', 
+                                 verbose_name='Категория'
+                                 )
     warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='main_storage', verbose_name='Склад')
     base_price = models.FloatField(verbose_name='Базовая цена')
     step_price = models.FloatField(verbose_name='Шаг цены')
 
     def __str__(self):
-        return str(self.base_price)
+        return f"{self.warehouse.title}|{str(self.base_price)}|{str(self.step_price)}"
 
     class Meta:
         verbose_name = 'Базовая цена'

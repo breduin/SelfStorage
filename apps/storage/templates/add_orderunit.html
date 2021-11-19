@@ -34,12 +34,14 @@
     $("#id_unit").change(function () {
       var unit_id = $(this).val();
       var quantity = $("#id_quantity").val();
+      var duration = $("#id_rent_duration").val();
 
       $.ajax({
         url: '{% url "get_unit_price" %}',
         data: {
           'unit_id': unit_id,
           'quantity': quantity,
+          'duration': duration,
         },
         dataType: 'json',
         success: function (data) {
@@ -48,16 +50,19 @@
       });
 
     });
+
 
     $("#id_quantity").change(function () {
       var quantity = $(this).val();
       var unit_id = $("#id_unit").val();
+      var duration = $("#id_rent_duration").val();
 
       $.ajax({
         url: '{% url "get_unit_price" %}',
         data: {
           'unit_id': unit_id,
           'quantity': quantity,
+          'duration': duration,
         },
         dataType: 'json',
         success: function (data) {
@@ -66,6 +71,26 @@
       });
 
     });
+
+    $("#id_rent_duration").change(function () {
+      var duration = $(this).val();
+      var unit_id = $("#id_unit").val();
+      var quantity = $("#id_quantity").val();
+
+      $.ajax({
+        url: '{% url "get_unit_price" %}',
+        data: {
+          'unit_id': unit_id,
+          'quantity': quantity,
+          'duration': duration,
+        },
+        dataType: 'json',
+        success: function (data) {
+          document.getElementById("rent_price").innerHTML = data.price;
+        }
+      });
+
+    });    
 
 
   </script>

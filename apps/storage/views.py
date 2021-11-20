@@ -1,14 +1,20 @@
 import re
 import json
+import random, string
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, JsonResponse
 from django.conf import settings
 from django.urls import reverse
 from datetime import date
 
-from .models import Warehouse, Price, Unit
+from .models import Warehouse, Price, Unit, Order, OrderUnit
 from .forms import OrderUnitForm, OrderForm
 from django.views.generic import TemplateView
+
+
+def get_random_string(n=50) -> str:
+    random_string = lambda n: ''.join([random.choice(string.ascii_letters) for i in range(n)])
+    return random_string(n)
 
 
 def main_page(request):
@@ -34,7 +40,7 @@ def get_calculator(request, category_id, warehouse_id=1):
             
             unit_id = order_unit.unit.id
             
-            warehouse_id = order_unit.warehouse
+            warehouse_id = order_unit.warehouse.id
             
             duration = order_unit.rent_duration
             
@@ -49,8 +55,18 @@ def get_calculator(request, category_id, warehouse_id=1):
                            )
 
             order_unit.price = get_price['price']
+
+            # Создание Order
+            
+            access_code = get_random_string()
+            order =  Order.objects.create(access_code=access_code,
+                                         user=request.user,
+                                         )
+
+            order_unit.order_id = order.id
+
             order_unit.save()
-            return HttpResponseRedirect(reverse('order'))
+            return HttpResponseRedirect(reverse('order', args=[order.id]))
     else:
         kwargs = {'category_id': category_id}
         
@@ -96,23 +112,17 @@ def get_calculator(request, category_id, warehouse_id=1):
 
     return render(request, 'add_orderunit.html', context)
 
-def make_order(request, category_id, warehouse_id=1):
 
-    if request.method == 'POST':
-        order_form = OrderForm(request.POST)
-        if order_form.is_valid():
-            order = order_form.save(commit=False)
-            # return redirect('/')
-    else:
-        order_form = OrderForm()
-        return render(request,
-                      'add_order.html',
-                      {'order_form': order_form}
-                      )
+def get_order(request, id):
 
-
-class OrderConfirmation(TemplateView):
-    template_name = 'order_confirmation.html'
+    order = Order.objects.get(id=id)
+    order_units = OrderUnit.objects.filter(order=order)
+    context = {
+        'order_units': order_units,
+        'order_id': order.id,
+    }
+   
+    return render(request, 'order_confirmation.html', context)
 
 
 def user_orders(request, user_id):

@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+<h1 class="m-3 mt-4">Ваш заказ</h1>
+
+{% for order in order_units  %}
+
+<div class="card">
+  <div class="card-header">
+    {{ order.warehouse }}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ order.unit }}, {{ order.quantity }}</h5>
+    <p class="card-text">{{ order.rent_duration }}</p>
+  </div>
+    <div class="card-footer">
+    {{ order.price }}
+  </div>
+</div>
+
+{% endfor %}
+
+<div class="d-grid gap-2 col-6 mx-auto mt-5 mb-5">
+<a class="btn btn-outline-success" href="{% url 'apps.payment:make_payment' order_id %}" role="button">Оплатить</a>
+</div>
+
+{% endblock %}

@@ -23,7 +23,6 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.storage.urls')),
-    path('payment/', include('apps.payment.urls')),
     path('accounts/', include('apps.users.urls')),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]

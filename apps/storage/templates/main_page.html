@@ -11,8 +11,7 @@
     <script type="text/javascript">
         ymaps.ready(init);
         function init(){
-            var geolocation = ymaps.geolocation,
-                myMap = new ymaps.Map("map", {
+            var myMap = new ymaps.Map("map", {
                 center: [55.755819, 37.617644],
                 zoom: 10,
                 controls: ['geolocationControl', 'zoomControl']
@@ -44,9 +43,6 @@
 
     myMap.geoObjects.add(myPlacemark_{{ forloop.counter0 }});    
     {% endfor %}
-
-
-    console.log(geolocation);
 
         }
     </script>
@@ -81,7 +77,7 @@
           <div class="carousel-caption">
             <h1>Круглосуточная надёжная охрана.</h1>
             <p>Все ваши вещи в полной безопасности.</p>
-            <p><a class="btn btn-lg btn-primary" href="{% url 'calculator' 1 1 %}">Найти ближайший склад</a></p>
+            <p><button id="get_nearest_warehouse_button_slider" class="btn btn-lg btn-primary" >Найти ближайший склад</button></p>
           </div>
         </div>
       </div>
@@ -151,9 +147,15 @@
     {% endblock %}
     </div>
 
+    {% block nearest_warehouse %}
+    <div class="d-grid gap-2 col-6 mx-auto mt-5 mb-5">
+      <button id="get_nearest_warehouse_button" class="btn btn-info">Найти ближайший склад</button>
+    </div>      
+    {% endblock %}
+
+
     <div class="row container-lg">
     {% block content %}
-    <hr class="featurette-divider">
     <h2>Наши склады</h2>
         {% for w in warehouses %}
         
@@ -207,4 +209,35 @@
     <!-- /END THE FEATURETTES -->
     {% endblock %}
 
+{% block jsfiles %}  
+<script type="text/javascript">
 
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+$("#get_nearest_warehouse_button, #get_nearest_warehouse_button_slider").click(function () {
+
+  function success(pos) {
+    var crd = pos.coords;
+
+    window.location.href = '/nearest-warehouse/'+`${crd.latitude}/`+`${crd.longitude}`;
+
+  };
+
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  };
+
+  navigator.geolocation.getCurrentPosition(success, error, options);
+
+
+});
+
+
+
+</script>
+
+{% endblock %}

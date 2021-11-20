@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="m-3 mt-4">Ближайший к вам склад</h1>
+
+<div class="card">
+  <div class="card-header">
+    {{ distance|floatformat }} км
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ warehouse.title }}</h5>
+    <p class="card-text">
+    <a class="btn btn-outline-warning" href="{% url 'calculator' 1 warehouse.id %}" role="button">Арендовать бокс</a>
+    <a class="btn btn-outline-info" href="{% url 'calculator' 2 warehouse.id %}" role="button">Сезонное хранение</a>
+    </p>
+  </div>
+    <div class="card-footer">
+    <i class="bi bi-house-door-fill"></i> {{ warehouse.address }}, <i class="bi bi-telephone-fill"></i> {{ warehouse.phone }}
+  </div>
+</div>
+
+{% endblock %}

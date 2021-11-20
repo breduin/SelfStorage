@@ -34,8 +34,7 @@ def get_calculator(request, category_id, warehouse_id=1):
             
             unit_id = order_unit.unit.id
             
-            # FIXME Добавить ID warehouse (переставить поля в модели)
-            warehouse_id = 1
+            warehouse_id = order_unit.warehouse
             
             duration = order_unit.rent_duration
             
@@ -56,6 +55,7 @@ def get_calculator(request, category_id, warehouse_id=1):
         kwargs = {'category_id': category_id}
         
         today = date.today()
+        initial_warehouse = warehouse_id
         initial_unit = Unit.objects.filter(category__id=category_id).first()
         initial_quantity = 1
         initial_duration = '1month'
@@ -65,8 +65,10 @@ def get_calculator(request, category_id, warehouse_id=1):
             'rent_start': today.strftime("%Y-%m-%d"), 
             'unit': initial_unit.id,
             'rent_duration': initial_duration,
+            'warehouse': initial_warehouse,
         }
         order_unit_form = OrderUnitForm(category_id=category_id, initial=initial_values)
+        order_unit_form.fields['unit'].queryset = Unit.objects.filter(category__id=category_id)
         
         # initial_price для начальных значений формы
         get_price = json.loads(get_unit_price(request, 
@@ -117,7 +119,6 @@ def user_orders(request, user_id):
     return HttpResponseRedirect('/')
 
 
-# TODO дописать функцию для AJAX-запроса
 def get_unit_price(request, unit_id=None, warehouse_id=None, duration=None, quantity=None):
     """
     Возвращает стоимость аренды объекта в зависимости 
@@ -125,7 +126,6 @@ def get_unit_price(request, unit_id=None, warehouse_id=None, duration=None, quan
     """
     unit_id = unit_id or request.GET.get('unit_id', None)
     warehouse_id = warehouse_id or request.GET.get('warehouse_id', None)
-    warehouse_id = 1
     duration = duration or request.GET.get('duration', None)
     quantity = quantity or request.GET.get('quantity', 1)
     

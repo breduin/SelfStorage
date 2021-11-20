@@ -4,10 +4,18 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class User(AbstractUser):
-    patronymic = models.CharField('Отчество', max_length=150, blank=True)
-    phone = PhoneNumberField('Мобильный телефон', null=True,
+    patronymic = models.CharField('Отчество', 
+                                  max_length=150, 
+                                  blank=True,
+                                  default=''
+                                  )
+    phone = PhoneNumberField('Мобильный телефон', 
+                             null=True,
                              help_text='Введите номер телефона, например, +79999999999')
-    passport = models.CharField('Номер паспорта', max_length=30, null=True)
+    passport = models.CharField('Номер паспорта', 
+                                max_length=30, 
+                                default=''
+                                )
     birthday_date = models.DateField('Дата рождения',
                                      null=True,
                                      db_index=True)

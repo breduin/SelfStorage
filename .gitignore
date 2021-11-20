@@ -67,7 +67,7 @@ db.sqlite3-journal
 db.sqlite3.bak*
 .idea/
 manage.py
-migrations/
+# migrations/
 
 # Flask stuff:
 instance/

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Unit
+from .models import Unit, Warehouse
 
 
 from .models import OrderUnit, Order
@@ -7,10 +7,17 @@ from .models import OrderUnit, Order
 
 class OrderUnitForm(forms.ModelForm):
 
-    unit = forms.ModelChoiceField(queryset=Unit.objects.all(), empty_label=None)
+    warehouse = forms.ModelChoiceField(queryset=Warehouse.objects.all(), 
+                                       empty_label=None,
+                                       label='Где?'
+                                       )
+    unit = forms.ModelChoiceField(queryset=Unit.objects.all(), 
+                                  empty_label=None,
+                                  label='Что?'
+                                  )
     rent_start = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},
                                  format='%Y-%m-%d'),
-                                 label='Дата начала аренды',
+                                 label='Когда?',
                                  error_messages={'required': ''})
 
     class Meta:

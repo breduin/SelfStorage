@@ -35,6 +35,7 @@
       var unit_id = $(this).val();
       var quantity = $("#id_quantity").val();
       var duration = $("#id_rent_duration").val();
+      var warehouse_id = $("#id_warehouse").val();
 
       $.ajax({
         url: '{% url "get_unit_price" %}',
@@ -42,6 +43,7 @@
           'unit_id': unit_id,
           'quantity': quantity,
           'duration': duration,
+          'warehouse_id': warehouse_id,
         },
         dataType: 'json',
         success: function (data) {
@@ -56,6 +58,7 @@
       var quantity = $(this).val();
       var unit_id = $("#id_unit").val();
       var duration = $("#id_rent_duration").val();
+      var warehouse_id = $("#id_warehouse").val();
 
       $.ajax({
         url: '{% url "get_unit_price" %}',
@@ -63,6 +66,7 @@
           'unit_id': unit_id,
           'quantity': quantity,
           'duration': duration,
+          'warehouse_id': warehouse_id,
         },
         dataType: 'json',
         success: function (data) {
@@ -76,6 +80,7 @@
       var duration = $(this).val();
       var unit_id = $("#id_unit").val();
       var quantity = $("#id_quantity").val();
+      var warehouse_id = $("#id_warehouse").val();
 
       $.ajax({
         url: '{% url "get_unit_price" %}',
@@ -83,6 +88,7 @@
           'unit_id': unit_id,
           'quantity': quantity,
           'duration': duration,
+          'warehouse_id': warehouse_id,
         },
         dataType: 'json',
         success: function (data) {
@@ -91,6 +97,29 @@
       });
 
     });    
+
+    $("#id_warehouse").change(function () {
+      var warehouse_id = $(this).val();
+      var unit_id = $("#id_unit").val();
+      var quantity = $("#id_quantity").val();
+      var duration = $("#id_rent_duration").val();
+
+      $.ajax({
+        url: '{% url "get_unit_price" %}',
+        data: {
+          'unit_id': unit_id,
+          'quantity': quantity,
+          'duration': duration,
+          'warehouse_id': warehouse_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+          document.getElementById("rent_price").innerHTML = data.price;
+        }
+      });
+
+    });    
+
 
 
   </script>

@@ -125,11 +125,11 @@ def get_order(request, id):
     return render(request, 'order_confirmation.html', context)
 
 
-def get_user_orders(request, user_id):
+def get_user_orders(request):
 
     orders = Order.objects \
         .annotate(order_price=Sum('rent_order__price')) \
-        .filter(user__id=user_id)
+        .filter(user__id=request.user.id)
     context = {'orders': orders}
     return render(request, 'user_orders.html', context)
 

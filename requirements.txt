@@ -7,3 +7,4 @@ whitenoise==5.3.0
 dj-database-url==0.5.0
 phonenumbers==8.12.37
 django-phonenumber-field==6.0.0
+geopy==2.2.0

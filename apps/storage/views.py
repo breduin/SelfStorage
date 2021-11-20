@@ -9,12 +9,8 @@ from datetime import date
 
 from .models import Warehouse, Price, Unit, Order, OrderUnit
 from .forms import OrderUnitForm, OrderForm
+from .help_functions import get_random_string, get_period_and_number_duration
 from django.views.generic import TemplateView
-
-
-def get_random_string(n=50) -> str:
-    random_string = lambda n: ''.join([random.choice(string.ascii_letters) for i in range(n)])
-    return random_string(n)
 
 
 def main_page(request):
@@ -60,7 +56,7 @@ def get_calculator(request, category_id, warehouse_id=1):
             
             access_code = get_random_string()
             order =  Order.objects.create(access_code=access_code,
-                                         user=request.user,
+                                          user=request.user,
                                          )
 
             order_unit.order_id = order.id
@@ -139,12 +135,8 @@ def get_unit_price(request, unit_id=None, warehouse_id=None, duration=None, quan
     duration = duration or request.GET.get('duration', None)
     quantity = quantity or request.GET.get('quantity', 1)
     
-    # находим единицу измерения периода, week или month
-    period_id = 3 if 'week' in duration else 4
 
-    # находим количество периодов, т.е. срок аренды
-    # ВНИМАНИЕ, ИЗВРАТ! Слабонервным не смотреть.
-    number_of_periods = int(re.match(r'\d{1,2}', duration).group(0))
+    period_id, number_of_periods = get_period_and_number_duration(duration)
     
     unit_price = Price.objects.get(unit__id=unit_id, 
                                     warehouse__id=warehouse_id, 

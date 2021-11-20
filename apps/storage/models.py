@@ -1,8 +1,10 @@
-from django.db import models
-from .validators import lat_validators, lng_validators
-from django.conf import settings
+from datetime import timedelta
 from phonenumber_field.modelfields import PhoneNumberField
+from django.db import models
+from django.conf import settings
 from django.utils import timezone
+from .help_functions import get_period_and_number_duration
+from .validators import lat_validators, lng_validators
 
 
 class Warehouse(models.Model):
@@ -134,11 +136,6 @@ class Order(models.Model):
                              editable=False
                              )
 
-    @property
-    def rent_data_end(self):
-        # FIXME
-        pass
-
     def get_sum(self):
         # FIXME
         pass
@@ -152,9 +149,6 @@ class Order(models.Model):
         db_table = 'orders'
 
 
-# TODO: Не понял откуда берётся значение price, уточнить и добавить.
-# Цена вычисляется как unit.price * quantity и записывается после заполнения формы,
-# например во Views после проверки формы is_valid().
 class OrderUnit(models.Model):
 
     DURATION_CHOICES = [
@@ -206,3 +200,14 @@ class OrderUnit(models.Model):
                               editable=False, 
                               null=True,                               
                               )
+
+    @property
+    def rent_end(self):
+        days_quantity_in_period = {
+                                    3 : 7, # неделя
+                                    4 : 30, # месяц
+                                  }
+
+        period_id, number_of_periods = get_period_and_number_duration(self.rent_duration)
+        delta = timedelta(days=days_quantity_in_period[period_id] * number_of_periods)
+        return self.rent_start + delta

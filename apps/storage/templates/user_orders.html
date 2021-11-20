@@ -12,12 +12,12 @@
                 <h5 class="card-title">{{ order_unit.warehouse }}</h5>
                 <p class="card-text">Предмет аренды: {{ order_unit.unit }}, {{ order_unit.quantity }}</p>
                 <p class="card-text">Начало аренды: {{ order_unit.rent_start }}</p>
-                <p class="card-text">Продолжительность аренды: {{ order_unit.rent_duration }}</p>
+                <p class="card-text">Продолжительность аренды: {{ order_unit.get_rent_duration_display }}, с {{ order_unit.rent_start }} до {{ order_unit.rent_end }}</p>
                 <p class="card-text">Стоимость аренды: {{ order_unit.price }} р.</p>
               </div>
             {% endfor %}
             <div class="card-footer">
-            Статус заказа: {{ order.status }}
+            Статус заказа: {{ order.get_status_display }}
             <p></p>
             Стоимость всего заказа: {{ order.order_price }} р.
             </div>

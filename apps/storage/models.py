@@ -117,9 +117,9 @@ class Price(models.Model):
 class Order(models.Model):
 
     STATUS_CHOICES = [
-        ('PREORDER', 'Preorder'),
-        ('ORDER', 'Order'),
-        ('DONE', 'Done'),
+        ('PREORDER', 'Не оплачен'),
+        ('ORDER', 'Оплачен'),
+        ('DONE', 'Завершён'),
     ]
 
     status = models.CharField('Статус заказа', 

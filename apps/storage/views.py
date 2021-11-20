@@ -15,11 +15,6 @@ from .help_functions import get_random_string, get_period_and_number_duration
 from django.views.generic import TemplateView
 
 
-def get_random_string(n=50) -> str:
-    random_string = lambda n: ''.join([random.choice(string.ascii_letters) for i in range(n)])
-    return random_string(n)
-
-
 def main_page(request):
     warehouses = Warehouse.objects.all()
     

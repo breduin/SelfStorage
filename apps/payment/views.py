@@ -1,6 +1,5 @@
 import stripe
 from django.shortcuts import redirect, render
-from django.urls import reverse
 from django.views.generic import TemplateView
 from django.conf import settings
 from apps.storage.models import Order

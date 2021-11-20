@@ -1,15 +1,16 @@
 import re
 import json
 import random, string
-from django.shortcuts import render, redirect
+
+from django.db.models import Sum
+from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from django.conf import settings
 from django.urls import reverse
 from datetime import date
 
 from .models import Warehouse, Price, Unit, Order, OrderUnit
-from .forms import OrderUnitForm, OrderForm
-from django.views.generic import TemplateView
+from .forms import OrderUnitForm
 
 
 def get_random_string(n=50) -> str:
@@ -120,12 +121,15 @@ def get_order(request, id):
         'order_units': order_units,
         'order_id': order.id,
     }
-   
+
     return render(request, 'order_confirmation.html', context)
 
 
 def get_user_orders(request, user_id):
-    orders = Order.objects.filter(user__id=user_id)
+
+    orders = Order.objects \
+        .annotate(order_price=Sum('rent_order__price')) \
+        .filter(user__id=user_id)
     context = {'orders': orders}
     return render(request, 'user_orders.html', context)
 

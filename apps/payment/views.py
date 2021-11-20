@@ -9,8 +9,9 @@ from django.db.models import Avg, Count, Min, Sum
 def make_payment(request, order_id):
     stripe.api_key = settings.STRIPE_PUBLISHABLE_KEY
 
-    order = Order.objects.annotate(order_price=Sum('rent_order__price')).get(id=order_id)
-    order_unit = OrderUnit.objects.filter(order=order)
+    order = Order.objects\
+        .annotate(order_price=Sum('rent_order__price'))\
+        .get(id=order_id)
 
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],

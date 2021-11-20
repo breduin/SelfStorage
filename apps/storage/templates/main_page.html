@@ -11,7 +11,8 @@
     <script type="text/javascript">
         ymaps.ready(init);
         function init(){
-            var myMap = new ymaps.Map("map", {
+            var geolocation = ymaps.geolocation,
+                myMap = new ymaps.Map("map", {
                 center: [55.755819, 37.617644],
                 zoom: 10,
                 controls: ['geolocationControl', 'zoomControl']
@@ -43,6 +44,9 @@
 
     myMap.geoObjects.add(myPlacemark_{{ forloop.counter0 }});    
     {% endfor %}
+
+
+    console.log(geolocation);
 
         }
     </script>

@@ -23,7 +23,6 @@ def main_page(request):
     warehouses_for_template = {}
     for w in warehouses:
         warehouses_for_template[w.title] = [[w.latitude, w.longitude], w.description]
-
     return render(request, 'main_page.html', context={
                                         'warehouses': warehouses,
                                         'YANDEX_MAPS_API_KEY': settings.YANDEX_MAPS_API_KEY,
@@ -125,8 +124,10 @@ def get_order(request, id):
     return render(request, 'order_confirmation.html', context)
 
 
-def user_orders(request, user_id):
-    return HttpResponseRedirect('/')
+def get_user_orders(request, user_id):
+    orders = Order.objects.filter(user__id=user_id)
+    context = {'orders': orders}
+    return render(request, 'user_orders.html', context)
 
 
 def get_unit_price(request, unit_id=None, warehouse_id=None, duration=None, quantity=None):

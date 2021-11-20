@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="m-3">Здравствуйте, {{ request.user }}!</h1>
+{% for order in orders %}
+    {{order.unit}}
+{% endfor %}
+{% endblock %}

@@ -1,9 +1,10 @@
 import stripe
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.generic import TemplateView
 from django.conf import settings
-from apps.storage.models import Order, OrderUnit
-from django.db.models import Avg, Count, Min, Sum
+from apps.storage.models import Order
+from django.db.models import Sum
 
 
 def make_payment(request, order_id):
@@ -26,8 +27,8 @@ def make_payment(request, order_id):
             'quantity': 1,
         }],
         mode='payment',
-        success_url=f'http://localhost:8000/order/{order_id}/payment/success/',
-        cancel_url=f'http://localhost:8000/order/{order_id}/',
+        success_url=request.build_absolute_uri('success/'),
+        cancel_url=request.build_absolute_uri('cancelled/'),
     )
 
     return redirect(session.url, code=303)

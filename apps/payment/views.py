@@ -26,8 +26,8 @@ def make_payment(request, order_id):
             'quantity': 1,
         }],
         mode='payment',
-        success_url=f'http://127.0.0.1:8000/order/{order_id}/payment/success/',
-        cancel_url=f'http://127.0.0.1:8000/order/{order_id}/',
+        success_url=request.build_absolute_uri('success/'),
+        cancel_url=request.build_absolute_uri('cancelled/'),
     )
 
     return redirect(session.url, code=303)

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'apps.payment',
     'apps.storage',
     'apps.users',
+    'crispy_forms',
 
 ]
 
@@ -138,3 +139,5 @@ AUTH_USER_MODEL = 'users.User'
 STRIPE_PUBLISHABLE_KEY = env.str('STRIPE_PUBLISHABLE_KEY')
 
 YANDEX_MAPS_API_KEY = env.str('YANDEX_MAPS_API_KEY')
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

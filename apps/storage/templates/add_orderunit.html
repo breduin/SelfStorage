@@ -14,12 +14,12 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h5>Пожалуйста, уточните данные:</h5>
-            <form action="." method="post">
-                {{ order_unit_form.as_p }}
+            <form action="." method="post" novalidate>
+                {{ order_unit_form|crispy }}
                 {% if not user.is_authenticated %}
                     <h5>Для формирования заказа заполните, пожалуйста, анкету:</h5>
                     <p></p>
-                    {{ registration_form.as_p }}
+                    {{ registration_form|crispy }}
                 {% endif %}
                 {% csrf_token %}
                 <p><input type="submit" value="Продолжить"></p>

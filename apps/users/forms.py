@@ -1,14 +1,17 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.html import format_html
 
 from .models import User
 
+
 class CreateUserForm(UserCreationForm):
-    birthday_date = forms.DateField(label='Дата рождения', initial=(timezone.now))
-    consent_to_processing_db = forms.BooleanField(label=format_html('Согласие на обработку <a href="{}">персональных данных</a>', 'https://vc.ru/legal/133217-soglasie-na-obrabotku-personalnyh-dannyh-blank-2020-goda/'))
+    birthday_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},
+                                                        format='%Y-%m-%d'),
+                                 label='Дата рождения',
+                                 error_messages={'required': ''})
+    consent_to_processing_db = forms.BooleanField(label=format_html('Согласие на обработку <a href="{}">персональных данных</a>', 'https://raw.githubusercontent.com/Fiskless/where-to-go/main/static/pd_aggreement.jpg'))
 
     class Meta:
         model = User

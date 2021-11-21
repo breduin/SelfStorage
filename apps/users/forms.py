@@ -1,6 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from django.utils import timezone
 from django.utils.html import format_html
 
 from .models import User

@@ -11,6 +11,7 @@ from datetime import date
 
 from .models import Warehouse, Price, Unit, Order, OrderUnit
 from .forms import OrderUnitForm, OrderForm
+from apps.users.forms import CreateUserForm
 from .help_functions import get_random_string, get_period_and_number_duration
 from django.views.generic import TemplateView
 
@@ -33,7 +34,9 @@ def get_calculator(request, category_id, warehouse_id=1):
 
     if request.method == 'POST':
         order_unit_form = OrderUnitForm(request.POST)
-        if order_unit_form.is_valid():
+        registration_form = CreateUserForm(request.POST)
+        if order_unit_form.is_valid() and registration_form.is_valid():
+
             order_unit = order_unit_form.save(commit=False)
             
             unit_id = order_unit.unit.id
@@ -57,13 +60,15 @@ def get_calculator(request, category_id, warehouse_id=1):
             # Создание Order
             
             access_code = get_random_string()
-            order =  Order.objects.create(access_code=access_code,
-                                          user=request.user,
+            new_user = registration_form.save()
+            order = Order.objects.create(access_code=access_code,
+                                         user=new_user,
                                          )
 
             order_unit.order_id = order.id
 
             order_unit.save()
+
             return HttpResponseRedirect(reverse('order', args=[order.id]))
     else:
         kwargs = {'category_id': category_id}
@@ -82,6 +87,7 @@ def get_calculator(request, category_id, warehouse_id=1):
             'warehouse': initial_warehouse,
         }
         order_unit_form = OrderUnitForm(category_id=category_id, initial=initial_values)
+        registration_form = CreateUserForm()
         order_unit_form.fields['unit'].queryset = Unit.objects.filter(category__id=category_id)
         
         # initial_price для начальных значений формы
@@ -90,13 +96,14 @@ def get_calculator(request, category_id, warehouse_id=1):
                         warehouse_id=warehouse_id, 
                         duration=initial_duration, 
                         quantity=initial_quantity
-                        ).content
-                        )        
+                                              ).content
+                               )
 
         context = {
             'order_unit_form': order_unit_form,
             'initial_price': get_price['price'],
             'category': category_id,
+            'registration_form': registration_form,
                    }
         return render(request, 'add_orderunit.html', context )
 
@@ -106,6 +113,7 @@ def get_calculator(request, category_id, warehouse_id=1):
         'order_unit_form': OrderUnitForm(request.POST),
         'initial_price': 10,
         'category': category_id,
+        'registration_form': CreateUserForm(request.POST)
                 }
 
     return render(request, 'add_orderunit.html', context)

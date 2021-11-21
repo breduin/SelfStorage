@@ -1,19 +1,18 @@
 import re
 import json
-import random, string
 
 from django.db.models import Sum
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from django.conf import settings
 from django.urls import reverse
+from django.db import transaction
 from datetime import date
 
 from .models import Warehouse, Price, Unit, Order, OrderUnit
-from .forms import OrderUnitForm, OrderForm
+from .forms import OrderUnitForm
 from apps.users.forms import CreateUserForm
-from .help_functions import get_random_string, get_period_and_number_duration
-from django.views.generic import TemplateView
+from .help_functions import get_random_string
 
 
 def main_page(request):
@@ -30,6 +29,7 @@ def main_page(request):
                  )
 
 
+@transaction.atomic
 def get_calculator(request, category_id, warehouse_id=1):
 
     if request.method == 'POST':

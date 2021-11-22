@@ -163,8 +163,8 @@
             <h5 class="card-header">{{ w.title }}</h5>
             <div class="card-body">
                 <p class="card-text">{{ w.description }}</p>
-                <a href="{% url 'calculator' 1 w.id %}" class="btn btn-outline-info">Арендовать бокс</a>
-                <a href="{% url 'calculator' 2 w.id %}" class="btn btn-outline-warning">Сезонное хранение</a>
+                <a href="{% url 'calculator' 1 w.id %}" class="btn btn-outline-warning">Арендовать бокс</a>
+                <a href="{% url 'calculator' 2 w.id %}" class="btn btn-outline-info">Сезонное хранение</a>
             </div>
             <div class="card-footer">
             <i class="bi bi-house-door-fill"></i> {{ w.address }}, <i class="bi bi-telephone-fill"></i> {{ w.phone }}

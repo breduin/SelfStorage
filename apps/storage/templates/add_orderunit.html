@@ -36,6 +36,22 @@
 
 {% block jsfiles %}
 <script>
+window.onload = function(e) {
+
+let unitOptions = document.querySelectorAll('.unit-options');
+
+for (var i = 0; i < unitOptions.length; i++) {
+  item = unitOptions[i];
+  icon = item.attributes["data-icon"].value;
+  content = item.innerHTML;
+  item.innerHTML = icon + ' ' + content;
+  }
+  
+}
+</script>
+
+
+<script>
     $("#id_unit").change(function () {
       var unit_id = $(this).val();
       var quantity = $("#id_quantity").val();

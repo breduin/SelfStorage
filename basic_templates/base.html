@@ -71,7 +71,7 @@
             {% if user.is_authenticated %}
             <a class="nav-link" href="{% url 'user_orders' %}">Личный кабинет</a>
             {% else %}
-            <div><a class="nav-link" href="{% url 'login' %}">Войти</a></div>
+            <div><a class="nav-link" href="{% url 'login' 0 %}">Войти</a></div>
             {% endif %}
           </li>
         </ul>

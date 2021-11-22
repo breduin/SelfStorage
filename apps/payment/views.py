@@ -2,8 +2,8 @@ import stripe
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from django.conf import settings
-from apps.storage.models import Order, OrderUnit
-from django.db.models import Avg, Count, Min, Sum
+from apps.storage.models import Order
+from django.db.models import Sum
 
 
 def make_payment(request, order_id):

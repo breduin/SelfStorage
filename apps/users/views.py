@@ -18,6 +18,7 @@ def register_view(request, order_id=0):
                 order = Order.objects.get(id=order_id)
                 order.user = new_user
                 order.save()
+                login(request, new_user)
                 return HttpResponseRedirect(reverse('order',
                                                     args=[order_id]))
             else:

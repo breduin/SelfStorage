@@ -46,13 +46,13 @@ def get_calculator(request, category_id, warehouse_id=1):
             
             quantity = order_unit.quantity
 
-            get_price = json.loads(get_unit_price(request, 
-                           unit_id=unit_id, 
-                           warehouse_id=warehouse_id, 
-                           duration=duration, 
-                           quantity=quantity
-                           ).content
-                           )
+            get_price = json.loads(get_unit_price(request,
+                                                  unit_id=unit_id,
+                                                  warehouse_id=warehouse_id,
+                                                  duration=duration,
+                                                  quantity=quantity
+                                                  ).content
+                                   )
 
             order_unit.price = get_price['price']
 
@@ -119,7 +119,6 @@ def get_calculator(request, category_id, warehouse_id=1):
         return render(request, 'add_orderunit.html', context)
 
     # возвращает, если форма невалидна
-    # FIXME указать initial_price для формы, которая вернулась с ошибкой
     context = {
         'order_unit_form': OrderUnitForm(request.POST),
         'initial_price': 10,

@@ -16,13 +16,14 @@
             <h5>Пожалуйста, уточните данные:</h5>
             <form action="." method="post" novalidate>
                 {{ order_unit_form|crispy }}
-                {% if not user.is_authenticated %}
-                    <h5>Для формирования заказа заполните, пожалуйста, анкету:</h5>
-                    <p></p>
-                    {{ registration_form|crispy }}
-                {% endif %}
                 {% csrf_token %}
-                <p><input type="submit" value="Продолжить"></p>
+                <p></p>
+                {% if user.is_authenticated %}
+                    <p><input type="submit" value="Продолжить"></p>
+                {% else %}
+                    <p><input type="submit" name="have_account" value="У меня уже есть аккаунт"></p>
+                    <p><input type="submit" name="want_account" value="Нет аккаунта, но хочу"></p>
+                {% endif %}
             </form>
         </div>
     </div>
@@ -123,7 +124,7 @@
         }
       });
 
-    });    
+    });
 
 
 

@@ -10,8 +10,8 @@ from django.db import transaction
 from datetime import date
 
 from .models import Warehouse, Price, Unit, Order, OrderUnit
+from apps.users.models import User
 from .forms import OrderUnitForm
-from apps.users.forms import CreateUserForm
 from .help_functions import get_random_string
 
 
@@ -34,8 +34,7 @@ def get_calculator(request, category_id, warehouse_id=1):
 
     if request.method == 'POST':
         order_unit_form = OrderUnitForm(request.POST)
-        registration_form = CreateUserForm(request.POST)
-        if order_unit_form.is_valid() and registration_form.is_valid():
+        if order_unit_form.is_valid():
 
             order_unit = order_unit_form.save(commit=False)
             
@@ -60,16 +59,30 @@ def get_calculator(request, category_id, warehouse_id=1):
             # Создание Order
             
             access_code = get_random_string()
-            new_user = registration_form.save()
-            order = Order.objects.create(access_code=access_code,
-                                         user=new_user,
-                                         )
+            if request.user.is_authenticated:
+                order = Order.objects.create(access_code=access_code,
+                                             user=request.user,
+                                             )
+                order_unit.order_id = order.id
 
-            order_unit.order_id = order.id
+                order_unit.save()
 
-            order_unit.save()
+                return HttpResponseRedirect(reverse('order', args=[order.id]))
 
-            return HttpResponseRedirect(reverse('order', args=[order.id]))
+            else:
+                order = Order.objects.create(access_code=access_code,
+                                             user=User.objects.get(id=1),
+                                             )
+
+                order_unit.order_id = order.id
+
+                order_unit.save()
+
+                if 'have_account' in request.POST:
+                    return HttpResponseRedirect(reverse('login', args=[order.id]))
+                elif 'want_account' in request.POST:
+                    return HttpResponseRedirect(reverse('register', args=[order.id]))
+
     else:
         kwargs = {'category_id': category_id}
         
@@ -87,7 +100,6 @@ def get_calculator(request, category_id, warehouse_id=1):
             'warehouse': initial_warehouse,
         }
         order_unit_form = OrderUnitForm(category_id=category_id, initial=initial_values)
-        registration_form = CreateUserForm()
         order_unit_form.fields['unit'].queryset = Unit.objects.filter(category__id=category_id)
         
         # initial_price для начальных значений формы
@@ -103,9 +115,8 @@ def get_calculator(request, category_id, warehouse_id=1):
             'order_unit_form': order_unit_form,
             'initial_price': get_price['price'],
             'category': category_id,
-            'registration_form': registration_form,
                    }
-        return render(request, 'add_orderunit.html', context )
+        return render(request, 'add_orderunit.html', context)
 
     # возвращает, если форма невалидна
     # FIXME указать initial_price для формы, которая вернулась с ошибкой
@@ -113,7 +124,6 @@ def get_calculator(request, category_id, warehouse_id=1):
         'order_unit_form': OrderUnitForm(request.POST),
         'initial_price': 10,
         'category': category_id,
-        'registration_form': CreateUserForm(request.POST)
                 }
 
     return render(request, 'add_orderunit.html', context)

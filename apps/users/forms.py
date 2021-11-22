@@ -10,7 +10,12 @@ class CreateUserForm(UserCreationForm):
                                                         format='%Y-%m-%d'),
                                  label='Дата рождения',
                                  error_messages={'required': ''})
-    consent_to_processing_db = forms.BooleanField(label=format_html('Согласие на обработку <a href="{}">персональных данных</a>', 'https://raw.githubusercontent.com/Fiskless/where-to-go/main/static/pd_aggreement.jpg'))
+    consent_to_processing_db = forms.BooleanField(
+        label=format_html(
+            'Согласие на обработку <a href="{}">персональных данных</a>',
+            'https://raw.githubusercontent.com/Fiskless/where-to-go/main/static/pd_aggreement.jpg'
+        )
+    )
 
     class Meta:
         model = User

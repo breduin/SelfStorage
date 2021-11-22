@@ -42,7 +42,7 @@
 
 * jQuery
 
-* платёжную систему Stripe
+* платёжную систему [Stripe](https://stripe.com/)
 
 * фотографии с сервиса [Pixabay](https://pixabay.com/ru/)
 
@@ -53,8 +53,7 @@
 
 * секретный ключ Django;
 * [ключ](https://yandex.ru/dev/maps/jsapi/doc/2.1/quick-start/index.html#get-api-key) для работы с API Яндекс.карты;
-* ключ API платёжной системы Stripe
-* ключ API онлайн-консультации
+* ключ API платёжной системы Stripe. Для его получения необходимо перейти в [мануал](https://stripe.com/docs/payments/accept-a-payment). Во 2 пункте этого мануала будет показан пример кода, где и будет ваш личный ключ `stripe.api_key`.
 * данные для подключения к БД
 * DEBUG и ALLOWED_HOSTS
 
@@ -67,7 +66,6 @@
     YANDEX_MAPS_API_KEY='ключ API Яндекса'
     POSTGRES_DB_URL=postgres://user_name:password@host:port/db_name
     STRIPE_PUBLISHABLE_KEY=<ключ платёжной системы Stripe>
-    JIVOSITE_KEY=<ключ API онлайн-консультации>
     
 
 Указывать эти ключи в файле настроек settings.py не нужно.
@@ -80,12 +78,11 @@
 
 ## Настройка платёжной системы
 
-Stripe
-
+Подключение платежной системы к вашему сайту подробно представлено в [мануале](https://stripe.com/docs/payments/accept-a-payment)
 
 ## Настройка онлайн-консультации
 
-Jivosite
+Для настройки онлайн-консультации Jivosite, [зарегистрируйтесь](https://www.jivo.ru/?partner_id=14624), после чего [подключите](https://app.jivosite.com/settings/channels) онлайн-консультанта к вашему сайту  
 
 ## Роли
 

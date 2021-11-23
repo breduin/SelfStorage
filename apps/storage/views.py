@@ -1,15 +1,15 @@
 import re
 import json
+from datetime import date
 
 from django.db.models import Sum
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from django.conf import settings
 from django.urls import reverse
-from django.db import transaction
-from datetime import date
+from django.db import transaction, models
 
-from .models import Warehouse, Price, Unit, Order, OrderUnit
+from .models import Warehouse, Price, Unit, Order, OrderUnit, BaseCategoryPrice
 from apps.users.models import User
 from .forms import OrderUnitForm
 from .help_functions import get_random_string
@@ -163,14 +163,21 @@ def get_unit_price(request, unit_id=None, warehouse_id=None, duration=None, quan
     period_id = 3 if 'week' in duration else 4
 
     # находим количество периодов, т.е. срок аренды
-    # ВНИМАНИЕ, ИЗВРАТ! Слабонервным не смотреть.
     number_of_periods = int(re.match(r'\d{1,2}', duration).group(0))
     
     unit_price = Price.objects.get(unit__id=unit_id, 
-                                    warehouse__id=warehouse_id, 
-                                    period__id=period_id,
-                                    ).price
-    price = unit_price * int(quantity) * number_of_periods    
+                                   warehouse__id=warehouse_id, 
+                                   period__id=period_id,
+                                   ).price                                    
+    price = unit_price * int(quantity) * number_of_periods
+    unit = Unit.objects.get(id=unit_id)
+    try:
+        base_price = BaseCategoryPrice.objects.get(category=unit.category.id, warehouse=warehouse_id).price
+    except BaseCategoryPrice.DoesNotExist:
+        base_price = 0 
+
+    price += base_price
+    
 
     price_for_template = {'price': price}
     return JsonResponse(price_for_template)

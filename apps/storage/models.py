@@ -71,26 +71,24 @@ class PricePeriod(models.Model):
         db_table = 'price_periods'
 
 
-class BaseStepPrice(models.Model):
+class BaseCategoryPrice(models.Model):
     category = models.ForeignKey(Category, 
                                  on_delete=models.CASCADE, 
-                                 limit_choices_to={'id': 1},
                                  related_name='price', 
                                  verbose_name='Категория'
                                  )
     warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
                                   related_name='main_storage',
                                   verbose_name='Склад')
-    base_price = models.FloatField(verbose_name='Базовая цена')
-    step_price = models.FloatField(verbose_name='Шаг цены')
+    price = models.FloatField(verbose_name='Базовая цена')
 
     def __str__(self):
-        return f"{self.warehouse.title}|{str(self.base_price)}|{str(self.step_price)}"
+        return f"{self.category} | {self.warehouse.title} | {str(self.price)}"
 
     class Meta:
         verbose_name = 'Базовая цена'
         verbose_name_plural = 'Базовые цены'
-        db_table = 'base_prices'
+        unique_together = ['category', 'warehouse']
 
 
 class Unit(models.Model):
@@ -160,7 +158,7 @@ class Order(models.Model):
         pass
 
     def __str__(self):
-        return self.status
+        return f"№ {self.id} | {self.user.username} | {self.get_status_display()}"
 
     class Meta:
         verbose_name = 'Заказ'

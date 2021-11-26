@@ -29,14 +29,17 @@ class OrderUnitForm(forms.ModelForm):
 
     warehouse = forms.ModelChoiceField(queryset=Warehouse.objects.all(), 
                                        empty_label=None,
-                                       label='Где?'
+                                       label='Где?',
+                                       widget=forms.Select(attrs={'class': 'form-control'})
                                        )
     unit = forms.ModelChoiceField(queryset=Unit.objects.all(), 
                                   empty_label=None,
                                   label='Что?',
-                                  widget=UnitSelect,
+                                  widget=UnitSelect(attrs={'class': 'form-control'}),
                                   )
-    rent_start = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},
+    rent_start = forms.DateField(widget=forms.DateInput(attrs={'type': 'date',
+                                                               'class': 'form-control'
+                                                              },
                                  format='%Y-%m-%d'),
                                  label='Когда?',
                                  error_messages={'required': ''})
@@ -44,10 +47,10 @@ class OrderUnitForm(forms.ModelForm):
     class Meta:
         model = OrderUnit
         fields = ['warehouse', 'unit', 'quantity', 'rent_duration', 'rent_start']
-
-    def __init__(self, *args, **kwargs):
-        category_id = kwargs.pop('category_id', None)
-        super(OrderUnitForm, self).__init__(*args, **kwargs)
+        widgets = {
+            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
+            'rent_duration': forms.Select(attrs={'class': 'form-control'})
+        }
 
 
 class OrderForm(forms.ModelForm):

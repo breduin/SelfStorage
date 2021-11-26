@@ -99,7 +99,7 @@ def get_calculator(request, category_id, warehouse_id=1):
             'rent_duration': initial_duration,
             'warehouse': initial_warehouse,
         }
-        order_unit_form = OrderUnitForm(category_id=category_id, initial=initial_values)
+        order_unit_form = OrderUnitForm(initial=initial_values)
         order_unit_form.fields['unit'].queryset = Unit.objects.filter(category__id=category_id)
         
         # initial_price для начальных значений формы
@@ -114,7 +114,6 @@ def get_calculator(request, category_id, warehouse_id=1):
         context = {
             'order_unit_form': order_unit_form,
             'initial_price': get_price['price'],
-            'category': category_id,
                    }
         return render(request, 'add_orderunit.html', context)
 
@@ -122,7 +121,6 @@ def get_calculator(request, category_id, warehouse_id=1):
     context = {
         'order_unit_form': OrderUnitForm(request.POST),
         'initial_price': 10,
-        'category': category_id,
                 }
 
     return render(request, 'add_orderunit.html', context)

@@ -167,7 +167,7 @@
                 <a href="{% url 'calculator' 2 w.id %}" class="btn btn-outline-info">Сезонное хранение</a>
             </div>
             <div class="card-footer">
-            <i class="bi bi-house-door-fill"></i> {{ w.address }}, <i class="bi bi-telephone-fill"></i> {{ w.phone }}
+            <i class="bi bi-house-door-fill"></i> {{ w.address }}, <i class="bi bi-telephone-fill"></i> {{ w.phone.as_national }}
             </div>
             </div>
 
